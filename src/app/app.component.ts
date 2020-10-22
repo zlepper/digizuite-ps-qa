@@ -1,15 +1,16 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { auth } from 'firebase/app';
-import { Observable } from 'rxjs';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { map, shareReplay } from 'rxjs/operators';
-import { MatDialog } from '@angular/material/dialog';
-import { AddNewCustomerDialogComponent } from './components/add-new-customer-dialog/add-new-customer-dialog.component';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { Customer } from './models';
-import {sortBy} from 'lodash';
+import {AngularFireAuth} from '@angular/fire/auth';
+import {auth} from 'firebase/app';
+import {Observable} from 'rxjs';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {map, shareReplay} from 'rxjs/operators';
+import {MatDialog} from '@angular/material/dialog';
+import {AddNewCustomerDialogComponent} from './components/add-new-customer-dialog/add-new-customer-dialog.component';
 import {Router} from '@angular/router';
+import {Customer} from './store/customer/customer.interfaces';
+import {select, Store} from '@ngrx/store';
+import {loadCustomers} from './store/customer/customer.actions';
+import {getAllCustomers} from './store/customer/customer.selectors';
 
 @Component({
   selector: 'app-root',
@@ -29,34 +30,30 @@ export class AppComponent implements OnInit {
     private fireAuth: AngularFireAuth,
     private breakpointObserver: BreakpointObserver,
     private dialog: MatDialog,
-    private firestore: AngularFirestore,
     private router: Router,
-  ) {}
+    private store: Store,
+  ) {
+  }
 
   public login(): void {
     const provider = new auth.OAuthProvider('microsoft.com');
     provider.setCustomParameters({
-      prompt: 'consent',
       tenant: '6e80d0d2-c049-4101-ad8d-8fd678b61299',
     });
 
     this.fireAuth.signInWithRedirect(provider);
   }
 
-  public logout(): void {
-    this.fireAuth.signOut();
-  }
-
   ngOnInit(): void {
     this.fireAuth.user.subscribe(u => {
-      console.log(u);
+      if (u === null) {
+        this.login();
+      } else {
+        this.store.dispatch(loadCustomers());
+      }
     });
 
-    const customerCollection = this.firestore.collection<Customer>('customers');
-
-    this.customers$ = customerCollection.valueChanges({ idField: 'id' }).pipe(map(customers => {
-      return sortBy(customers, 'name');
-    }));
+    this.customers$ = this.store.pipe(select(getAllCustomers));
   }
 
   addNewCustomer(): void {
