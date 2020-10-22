@@ -12,8 +12,8 @@ export const environment = {
     storageBucket: 'digizuite-ps-qa.appspot.com',
     messagingSenderId: '28009938404',
     appId: '1:28009938404:web:21023fe957258a5e0e1bf1',
-    measurementId: 'G-MXS7YSJ3QE'
-  }
+    measurementId: 'G-MXS7YSJ3QE',
+  },
 };
 
 /*
