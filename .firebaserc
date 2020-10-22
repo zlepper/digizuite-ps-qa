@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "digizuite-ps-qa": {
+      "hosting": {
+        "digizuite-ps-qa": [
+          "digizuite-ps-qa"
+        ]
+      }
+    }
+  }
+}

@@ -121,8 +121,16 @@
               "devServerTarget": "digizuite-ps-qa:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {}
         }
       }
-    }},
-  "defaultProject": "digizuite-ps-qa"
+    }
+  },
+  "defaultProject": "digizuite-ps-qa",
+  "cli": {
+    "analytics": "9e9221f3-e280-4755-89cc-ecf2d6c4b663"
+  }
 }
