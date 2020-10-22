@@ -10,7 +10,7 @@ import { auth } from 'firebase/app';
 export class AppComponent implements OnInit {
   title = 'digizuite-ps-qa';
 
-  constructor(private auth: AngularFireAuth) {}
+  constructor(private fireAuth: AngularFireAuth) {}
 
   public login(): void {
     const provider = new auth.OAuthProvider('microsoft.com');
@@ -19,15 +19,15 @@ export class AppComponent implements OnInit {
       tenant: '6e80d0d2-c049-4101-ad8d-8fd678b61299',
     });
 
-    this.auth.signInWithRedirect(provider);
+    this.fireAuth.signInWithRedirect(provider);
   }
 
   public logout(): void {
-    this.auth.signOut();
+    this.fireAuth.signOut();
   }
 
   ngOnInit(): void {
-    this.auth.user.subscribe(u => {
+    this.fireAuth.user.subscribe(u => {
       console.log(u);
     });
   }
