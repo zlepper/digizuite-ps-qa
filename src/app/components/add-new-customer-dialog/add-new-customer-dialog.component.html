@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Add customer</h1>
+<form mat-dialog-content novalidate [formGroup]="form">
+  <mat-form-field>
+    <mat-label>Customer name</mat-label>
+    <input matInput formControlName="name" />
+  </mat-form-field>
+</form>
+
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="add()" [disabled]="form.invalid || (loading | async)">
+    <ng-container *ngIf="loading | async; else showNotAdding"> Adding... </ng-container>
+
+    <ng-template #showNotAdding> Add </ng-template>
+  </button>
+</div>
