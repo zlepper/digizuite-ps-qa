@@ -10,6 +10,8 @@
     </div>
 
     <div class="environments" formArrayName="environments">
+      <h2>Environments</h2>
+
       <ng-container *ngFor="let environmentControl of environments; let environmentIndex = index">
         <mat-card [formGroupName]="environmentIndex">
           <mat-card-content>
@@ -58,7 +60,13 @@
       </ng-container>
     </div>
 
-    <div class="Customer actions">
+    <div class="customer-user-profiles">
+      <h2>User Profiles</h2>
+
+
+    </div>
+
+    <div class="customer-actions">
       <button mat-button (click)="addNewEnvironment()" data-cy="add-new-environment-button">Add new environment</button>
       <button
         mat-button

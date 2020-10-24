@@ -27,6 +27,18 @@ export interface CustomerEnvironment {
   id: string;
 }
 
+export interface CustomerProfile {
+  /**
+   * The id of the profile
+   */
+  id: string;
+
+  /**
+   * The name of the profile
+   */
+  name: string;
+}
+
 export interface Customer {
   /**
    * The name of the customer
@@ -40,6 +52,11 @@ export interface Customer {
    * All the environments the customer has
    */
   environments: CustomerEnvironment[];
+
+  /**
+   * The user profiles this customer operates with
+   */
+  profiles: CustomerProfile[];
 }
 
 export const customerAdapter = createEntityAdapter<Customer>({

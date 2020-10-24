@@ -2,6 +2,20 @@ import { createEntityAdapter, EntityState } from '@ngrx/entity';
 
 export const productFeatureKey = 'product';
 
+export interface ProductUseCase {
+  id: string;
+  productId: string;
+  name: string;
+  details: string;
+  fromVersion: string|null;
+  toVersion: string|null;
+}
+
+export const productUseCaseAdapter = createEntityAdapter<ProductUseCase>({
+  selectId: useCase => useCase.id,
+  sortComparer: (a, b) => a.name.localeCompare(b.name),
+});
+
 export interface ProductVersion {
   version: string;
 }
@@ -18,11 +32,15 @@ export const productAdapter = createEntityAdapter<Product>({
 });
 
 export interface ProductState {
-  loading: boolean;
+  loadingProducts: boolean;
+  loadingUseCases: boolean;
   products: EntityState<Product>;
+  useCases: EntityState<ProductUseCase>;
 }
 
 export const initialProductState: ProductState = {
-  loading: true,
+  loadingProducts: true,
+  loadingUseCases: true,
   products: productAdapter.getInitialState(),
+  useCases: productUseCaseAdapter.getInitialState(),
 };

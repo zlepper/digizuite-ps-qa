@@ -1,14 +1,14 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ProductDisplayService } from '../../../services/product-display.service';
-import { Product } from '../../../store/product/product.interfaces';
+import { Product, ProductUseCase } from '../../../store/product/product.interfaces';
 import { BehaviorSubject, combineLatest, Observable, of, Subscription } from 'rxjs';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { AppFirestoreService } from '../../../services/app-firestore.service';
 import { select, Store } from '@ngrx/store';
 import { updatedUsedProductVersions } from '../../../store/customer/customer.actions';
 import { getAllCustomers } from '../../../store/customer/customer.selectors';
-import { map, shareReplay, startWith, switchMap } from 'rxjs/operators';
+import { map, shareReplay, startWith, switchMap, take } from 'rxjs/operators';
+import { generateId, valueUpdates, Version } from '../../../helpers';
 
 interface EditedProduct {
   id: string;
@@ -28,44 +28,86 @@ interface EditedProduct {
 })
 export class EditProductComponent implements OnInit {
   public product$: Observable<Product>;
-  public form: FormGroup;
+  public productForm: FormGroup;
+
+  public productUseCasesForm: FormGroup;
 
   public loading = new BehaviorSubject<boolean>(false);
   public error = new BehaviorSubject<string | null>(null);
+  public availableVersions$: Observable<Version[]>;
+  public subs = new Subscription();
+  public savingUseCases = new BehaviorSubject<boolean>(false);
   private usedVersions$: Observable<Set<string>>;
-
-  public get versions() {
-    return (this.form?.get('versions') as FormArray).controls;
-  }
+  private useCases$: Observable<ProductUseCase[]>;
 
   constructor(
     private productDisplayService: ProductDisplayService,
     private fb: FormBuilder,
     private firestore: AppFirestoreService,
     private store: Store,
+    private cd: ChangeDetectorRef,
   ) {}
 
-  public subs = new Subscription();
+  public get versionControls() {
+    return (this.productForm.get('versions') as FormArray).controls;
+  }
+
+  public get useCaseControls() {
+    return (this.productUseCasesForm.get('useCases') as FormArray).controls;
+  }
 
   ngOnInit(): void {
     this.productDisplayService.init();
 
     this.product$ = this.productDisplayService.product$;
 
+    this.useCases$ = this.productDisplayService.useCases$;
+
     this.subs.add(
       this.product$.subscribe(product => {
         const versions = (product.versions ?? []).map(version => {
           return this.fb.group({
             originalVersion: [version.version],
-            version: [version.version, Validators.required],
+            version: [version.version, Validators.compose([Validators.required, Validators.pattern(/(\d+)\.(\d+)\.(\d+)/)])],
           });
         });
 
-        this.form = this.fb.group({
+        this.productForm = this.fb.group({
           id: product.id,
           name: [product.name, Validators.required],
           versions: this.fb.array(versions),
         });
+
+        this.cd.markForCheck();
+      }),
+    );
+
+    this.subs.add(
+      this.useCases$.subscribe(cases => {
+        console.log(cases);
+        this.productUseCasesForm = this.fb.group({
+          useCases: this.fb.array(
+            cases.map(c =>
+              this.fb.group({
+                id: [c.id],
+                productId: [c.productId],
+                name: [c.name, Validators.required],
+                details: [c.details],
+                fromVersion: [c.fromVersion],
+                toVersion: [c.toVersion],
+              }),
+            ),
+          ),
+        });
+        this.cd.markForCheck();
+      }),
+    );
+
+    this.availableVersions$ = this.product$.pipe(
+      map(product => product.versions.map(v => v.version)),
+      map(versions => versions.map(v => new Version(v)).sort((a, b) => a.compare(b))),
+      shareReplay({
+        refCount: true,
       }),
     );
 
@@ -100,16 +142,16 @@ export class EditProductComponent implements OnInit {
   public addNewVersion() {
     const version = this.fb.group({
       originalVersion: [null],
-      version: ['', Validators.required],
+      version: ['', Validators.compose([Validators.required, Validators.pattern(/(\d+)\.(\d+)\.(\d+)/)])],
     });
 
-    const versions = this.form.get('versions') as FormArray;
+    const versions = this.productForm.get('versions') as FormArray;
     versions.push(version);
     versions.markAsDirty();
   }
 
   public save() {
-    const product: EditedProduct = this.form.value;
+    const product: EditedProduct = this.productForm.value;
 
     const changedVersions = product.versions
       .filter(v => v.originalVersion !== v.version && v.originalVersion)
@@ -154,7 +196,7 @@ export class EditProductComponent implements OnInit {
   }
 
   removeVersion(versionIndex: number) {
-    const versions = this.form.get('versions') as FormArray;
+    const versions = this.productForm.get('versions') as FormArray;
     versions.removeAt(versionIndex);
     versions.markAsDirty();
   }
@@ -171,5 +213,83 @@ export class EditProductComponent implements OnInit {
         return this.isUsedVersion(originalVersion).pipe(map(isUsed => !isUsed));
       }),
     );
+  }
+
+  addUseCase() {
+    this.product$.pipe(take(1)).subscribe(product => {
+      const uc = this.fb.group({
+        id: [generateId()],
+        productId: [product.id],
+        name: ['', Validators.required],
+        details: [''],
+        fromVersion: [null],
+        toVersion: [null],
+      });
+
+      const useCases = this.productUseCasesForm.get('useCases') as FormArray;
+      useCases.push(uc);
+      useCases.markAsDirty();
+    });
+  }
+
+  public removeUseCase(index: number) {
+    const useCases = this.productUseCasesForm.get('useCases') as FormArray;
+    useCases.removeAt(index);
+    useCases.markAsDirty();
+  }
+
+  public getLowerVersions(useCaseIndex: number): Observable<Version[]> {
+    const value$ = valueUpdates<string>(this.productUseCasesForm.get(['useCases', useCaseIndex, 'toVersion'])!);
+
+    return combineLatest([value$, this.availableVersions$]).pipe(
+      map(([maxVersion, availableVersions]) => {
+        if (!maxVersion) {
+          return availableVersions;
+        }
+
+        const selected = new Version(maxVersion);
+
+        return availableVersions.filter(v => v.compare(selected) <= 0);
+      }),
+    );
+  }
+
+  public getUpperVersions(useCaseIndex: number): Observable<Version[]> {
+    const value$ = valueUpdates<string>(this.productUseCasesForm.get(['useCases', useCaseIndex, 'fromVersion'])!);
+
+    return combineLatest([value$, this.availableVersions$]).pipe(
+      map(([minVersion, availableVersions]) => {
+        if (!minVersion) {
+          return availableVersions;
+        }
+
+        const selected = new Version(minVersion);
+
+        return availableVersions.filter(v => v.compare(selected) >= 0);
+      }),
+    );
+  }
+
+  async saveProductUseCases() {
+    const useCaseControls = this.productUseCasesForm.get('useCases') as FormArray;
+
+    const promises = [];
+    for (const control of useCaseControls.controls) {
+      if (control.dirty) {
+        const useCase: ProductUseCase = control.value;
+
+        const p = this.firestore.productUseCaseCollection.doc(useCase.id).set(useCase);
+        promises.push(p);
+      }
+    }
+
+    try {
+      this.savingUseCases.next(true);
+      await Promise.all(promises);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      this.savingUseCases.next(false);
+    }
   }
 }

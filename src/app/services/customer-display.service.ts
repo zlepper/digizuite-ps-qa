@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, NEVER, Observable, of } from 'rxjs';
 import { Customer } from '../store/customer/customer.interfaces';
 import { getCustomer, isLoadingCustomers } from '../store/customer/customer.selectors';
-import { filter, map, switchMap } from 'rxjs/operators';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 
 @Injectable()
 export class CustomerDisplayService  {
@@ -24,6 +24,7 @@ export class CustomerDisplayService  {
     const customerObs = customerId.pipe(switchMap(id => this.store.pipe(select(getCustomer(id)))));
 
     this.customer$ = combineLatest([customerObs, loadingCustomer]).pipe(
+      tap(a => console.log(a)),
       filter(([, loading]) => !loading),
       switchMap(([customer]) => {
         if (!customer) {

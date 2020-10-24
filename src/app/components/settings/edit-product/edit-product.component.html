@@ -1,7 +1,9 @@
-<div *ngIf="product$ | async as product; else showLoading">
-  <h1 class="mat-title">Edit <span data-cy="product-title">{{ product.name }}</span></h1>
+<div *ngIf="product$ | async as product; else showLoading" class="container">
+  <h1 class="mat-title product-title">
+    Edit <span data-cy="product-title">{{ product.name }}</span>
+  </h1>
 
-  <form [formGroup]="form" *ngIf="form">
+  <form [formGroup]="productForm" *ngIf="productForm" (ngSubmit)="save()" class="product-editor">
     <div class="product-name">
       <mat-form-field>
         <mat-label>Product Name</mat-label>
@@ -12,11 +14,11 @@
     <div class="product-versions" formArrayName="versions">
       <h2>Versions</h2>
 
-      <ng-container *ngFor="let versionControl of versions; let versionIndex = index">
+      <ng-container *ngFor="let versionControl of versionControls; let versionIndex = index">
         <div [formGroupName]="versionIndex" data-cy="product-version-group">
           <mat-form-field>
             <mat-label>Version</mat-label>
-            <input type="text" matInput formControlName="version" data-cy="version-name-input" />
+            <input type="text" matInput formControlName="version" data-cy="version-name-input" pattern="(\d+)\.(\d+)\.(\d+)" />
           </mat-form-field>
 
           <span *ngIf="canRemoveVersion(versionControl) | async; else showCannotRemoveVersion">
@@ -31,17 +33,59 @@
         </div>
       </ng-container>
 
-      <button mat-button (click)="addNewVersion()" data-cy="add-version-button">Add version</button>
+      <button mat-button (click)="addNewVersion()" type="button" data-cy="add-version-button">Add version</button>
     </div>
 
     <button
       mat-button
-      (click)="save()"
       color="primary"
-      [disabled]="form.pristine || form.invalid || (loading | async)"
+      [disabled]="productForm.pristine || productForm.invalid || (loading | async)"
       data-cy="save-product-button"
     >
       {{ (loading | async) ? 'Saving changes' : 'Save changes' }}
+    </button>
+  </form>
+
+  <form *ngIf="productUseCasesForm" [formGroup]="productUseCasesForm" (ngSubmit)="saveProductUseCases()" class="use-case-editor">
+    <div formArrayName="useCases">
+      <div class="use-case" *ngFor="let _ of useCaseControls; let index = index" [formGroupName]="index">
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input matInput type="text" formControlName="name" />
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Min version</mat-label>
+          <mat-select formControlName="fromVersion">
+            <mat-option [value]="null"> No min version </mat-option>
+            <mat-option *ngFor="let v of getLowerVersions(index) | async" [value]="v.text">
+              {{ v.text }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Max version</mat-label>
+          <mat-select formControlName="toVersion">
+            <mat-option [value]="null"> No max version </mat-option>
+            <mat-option *ngFor="let v of getUpperVersions(index) | async" [value]="v.text">
+              {{ v.text }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-button type="button" color="warn" (click)="removeUseCase(index)">
+          Remove
+        </button>
+      </div>
+    </div>
+
+    <button mat-button type="button" (click)="addUseCase()">
+      Add new use case
+    </button>
+
+    <button mat-button>
+      Save changes
     </button>
   </form>
 </div>
