@@ -5,7 +5,7 @@ import {MainDashboardComponent} from './components/main-dashboard/main-dashboard
 
 const routes: Routes = [
   {
-    path: 'customer/:id',
+    path: 'customer/:customerId',
     component: CustomerDashboardComponent
   },
   {

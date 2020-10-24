@@ -1,1 +1,10 @@
-<p>customer-dashboard works!</p>
+<div *ngIf="customer$|async as customer; else showLoading">
+  <pre>{{customer|json}}</pre>
+</div>
+
+<ng-template #showLoading>
+  <div class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>
+

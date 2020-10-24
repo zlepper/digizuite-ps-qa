@@ -26,3 +26,15 @@
 .filler {
   flex: 1;
 }
+
+.sidenav-content {
+  display: grid;
+  grid-template-rows: auto 0 1fr;
+  grid-template-columns: 1fr;
+
+  & > *:last-child {
+    grid-row: 3;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}

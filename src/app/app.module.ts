@@ -25,6 +25,7 @@ import { customerReducer } from './store/customer/customer.reducer';
 import { CustomerEffects } from './store/customer/customer.effects';
 import { MatMenuModule } from '@angular/material/menu';
 import { ConfirmDeleteDialogComponent } from './components/confirm-delete-dialog/confirm-delete-dialog.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { ConfirmDeleteDialogComponent } from './components/confirm-delete-dialog
     MatFormFieldModule,
     MatInputModule,
     MatMenuModule,
+    MatProgressSpinnerModule,
     ReactiveFormsModule,
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([]),

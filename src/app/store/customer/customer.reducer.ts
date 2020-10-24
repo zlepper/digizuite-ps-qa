@@ -16,6 +16,7 @@ export const customerReducer = createReducer(
     return {
       ...state,
       customers,
+      loading: false
     };
   }),
 );

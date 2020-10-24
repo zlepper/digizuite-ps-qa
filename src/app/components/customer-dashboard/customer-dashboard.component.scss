@@ -1,0 +1,14 @@
+:host {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+
+}
+
+.spinner-container{
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+
+  align-self: center;
+  justify-self: center;
+}
