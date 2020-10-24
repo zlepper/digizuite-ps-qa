@@ -23,9 +23,17 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { customerReducer } from './store/customer/customer.reducer';
 import { CustomerEffects } from './store/customer/customer.effects';
+import { MatMenuModule } from '@angular/material/menu';
+import { ConfirmDeleteDialogComponent } from './components/confirm-delete-dialog/confirm-delete-dialog.component';
 
 @NgModule({
-  declarations: [AppComponent, AddNewCustomerDialogComponent, CustomerDashboardComponent, MainDashboardComponent],
+  declarations: [
+    AppComponent,
+    AddNewCustomerDialogComponent,
+    CustomerDashboardComponent,
+    MainDashboardComponent,
+    ConfirmDeleteDialogComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -40,6 +48,7 @@ import { CustomerEffects } from './store/customer/customer.effects';
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
+    MatMenuModule,
     ReactiveFormsModule,
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([]),

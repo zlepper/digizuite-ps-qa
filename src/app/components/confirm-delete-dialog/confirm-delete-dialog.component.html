@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>Danger</h1>
+
+<div mat-dialog-content>
+  {{data.text}}
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button cdkFocusInitial [mat-dialog-close]="false" data-cy="deny-delete-button">
+    Keep
+  </button>
+  <button mat-button [mat-dialog-close]="true" data-cy="confirm-delete-button">
+    Delete
+  </button>
+</div>

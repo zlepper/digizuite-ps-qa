@@ -2,13 +2,16 @@
 <form mat-dialog-content novalidate [formGroup]="form">
   <mat-form-field>
     <mat-label>Customer name</mat-label>
-    <input matInput formControlName="name" autocomplete="off" />
+    <input matInput formControlName="name" autocomplete="off" data-cy="new-customer-name" />
+    <mat-error *ngIf="error$|async as error">
+      {{error}}
+    </mat-error>
   </mat-form-field>
 </form>
 
 <div mat-dialog-actions>
   <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button (click)="add()" [disabled]="form.invalid || (loading | async)">
+  <button mat-button (click)="add()" [disabled]="form.invalid || (loading | async)" data-cy="add-new-customer-confirm">
     <ng-container *ngIf="loading | async; else showNotAdding"> Adding... </ng-container>
 
     <ng-template #showNotAdding> Add </ng-template>

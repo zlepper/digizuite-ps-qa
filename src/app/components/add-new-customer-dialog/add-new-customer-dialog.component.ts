@@ -16,7 +16,7 @@ export class AddNewCustomerDialogComponent implements OnInit {
     name: new FormControl('', Validators.required),
   });
 
-  public error = new BehaviorSubject<string>('');
+  public error$ = new BehaviorSubject<string>('');
 
   public loading = new BehaviorSubject<boolean>(false);
 
@@ -38,10 +38,12 @@ export class AddNewCustomerDialogComponent implements OnInit {
     customers
       .add(data)
       .then(doc => {
+        console.log('created document');
         this.dialogRef.close(doc);
       })
       .catch(err => {
         console.error(err);
+        this.error$.next(err);
       })
       .finally(() => {
         this.loading.next(false);
