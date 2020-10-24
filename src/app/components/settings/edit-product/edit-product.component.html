@@ -1,11 +1,11 @@
 <div *ngIf="product$ | async as product; else showLoading">
-  <h1 class="mat-title">Edit {{ product.name }}</h1>
+  <h1 class="mat-title">Edit <span data-cy="product-title">{{ product.name }}</span></h1>
 
   <form [formGroup]="form" *ngIf="form">
     <div class="product-name">
       <mat-form-field>
         <mat-label>Product Name</mat-label>
-        <input matInput type="text" formControlName="name" />
+        <input matInput type="text" formControlName="name" data-cy="product-name-input" />
       </mat-form-field>
     </div>
 
@@ -13,42 +13,35 @@
       <h2>Versions</h2>
 
       <ng-container *ngFor="let versionControl of versions; let versionIndex = index">
-        <div [formGroupName]="versionIndex">
+        <div [formGroupName]="versionIndex" data-cy="product-version-group">
           <mat-form-field>
             <mat-label>Version</mat-label>
-            <input type="text" matInput formControlName="version" />
+            <input type="text" matInput formControlName="version" data-cy="version-name-input" />
           </mat-form-field>
 
-          <span *ngIf="canRemoveVersion(versionControl)|async; else showCannotRemoveVersion">
-            <button
-              mat-button
-              color="warn"
-              (click)="removeVersion(versionIndex)"
-            >
-              Remove
-            </button>
+          <span *ngIf="canRemoveVersion(versionControl) | async; else showCannotRemoveVersion">
+            <button mat-button color="warn" (click)="removeVersion(versionIndex)" data-cy="remove-version-button">Remove</button>
           </span>
 
           <ng-template #showCannotRemoveVersion>
             <span matTooltip="Version is currently in use, cannot remove.">
-              <button
-                mat-button
-                color="warn"
-                disabled
-              >
-                Remove
-              </button>
+              <button mat-button color="warn" disabled>Remove</button>
             </span>
           </ng-template>
-
         </div>
       </ng-container>
 
-      <button mat-button (click)="addNewVersion()">Add version</button>
+      <button mat-button (click)="addNewVersion()" data-cy="add-version-button">Add version</button>
     </div>
 
-    <button mat-button (click)="save()" color="primary" [disabled]="form.pristine || form.invalid || (loading | async)">
-      {{(loading|async) ? 'Saving changes' : 'Save changes'}}
+    <button
+      mat-button
+      (click)="save()"
+      color="primary"
+      [disabled]="form.pristine || form.invalid || (loading | async)"
+      data-cy="save-product-button"
+    >
+      {{ (loading | async) ? 'Saving changes' : 'Save changes' }}
     </button>
   </form>
 </div>

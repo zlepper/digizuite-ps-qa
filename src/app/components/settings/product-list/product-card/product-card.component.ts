@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { Product } from '../../../../store/product/product.interfaces';
 import { Store } from '@ngrx/store';
+import { AppFirestoreService } from '../../../../services/app-firestore.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-product-card',
@@ -12,10 +14,26 @@ export class ProductCardComponent implements OnInit {
   @Input()
   public product: Product;
 
-  constructor(private store: Store) {
-  }
+  public deleting = new BehaviorSubject<boolean>(false);
 
-  ngOnInit(): void {
-  }
+  constructor(private firestore: AppFirestoreService) {}
 
+  ngOnInit(): void {}
+
+  deleteProduct() {
+    this.deleting.next(true);
+
+    this.firestore.productCollection
+      .doc(this.product.id)
+      .delete()
+      .then(() => {
+        console.log('product deleted');
+      })
+      .catch(err => {
+        console.error(err);
+      })
+      .finally(() => {
+        this.deleting.next(false);
+      });
+  }
 }

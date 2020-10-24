@@ -38,7 +38,7 @@
       <span class="filler"></span>
 
       <ng-container *ngIf="user$ | async as user; else showUnAuthorized">
-        <a [routerLink]="['products']" mat-button>Products</a>
+        <a [routerLink]="['products']" mat-button data-cy="product-settings-link">Products</a>
 
         <span>Hi {{ user.displayName }}</span>
 

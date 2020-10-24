@@ -1,11 +1,11 @@
-<ng-container *ngIf="products$ | async as products">
+<ng-container *ngIf="products$ | async as products; else showLoading">
   <div class="list">
     <ng-container *ngFor="let product of products">
       <app-product-card [product]="product"></app-product-card>
     </ng-container>
   </div>
 
-  <button mat-button (click)="startAddProduct()">
+  <button mat-button (click)="startAddProduct()" data-cy="add-product-button">
     Add new product
   </button>
 </ng-container>
