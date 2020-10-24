@@ -19,11 +19,31 @@
             </mat-form-field>
 
             <div formArrayName="products">
-              <ng-container *ngFor="let productControl of getProducts(environmentIndex); let productIndex = index">
-              TODO
+              <ng-container *ngFor="let _ of getProducts(environmentIndex); let productIndex = index">
+                <div [formGroupName]="productIndex">
+                  <mat-form-field>
+                    <mat-label>Product</mat-label>
+                    <mat-select formControlName="productId">
+                      <mat-option *ngFor="let product of allProducts$ | async" [value]="product.id">
+                        {{ product.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
 
+                  <mat-form-field>
+                    <mat-label>Version</mat-label>
+                    <mat-select formControlName="version">
+                      <mat-option *ngFor="let version of getProductVersions(environmentIndex, productIndex) | async" [value]="version">
+                        {{ version }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
 
+                  <button mat-button color="warn" (click)="removeProduct(environmentIndex, productIndex)">Remove</button>
+                </div>
               </ng-container>
+
+              <button mat-button (click)="addProduct(environmentIndex)">Add product</button>
             </div>
           </mat-card-content>
 
@@ -36,7 +56,9 @@
 
     <div class="Customer actions">
       <button mat-button (click)="addNewEnvironment()">Add new environment</button>
-      <button mat-button [disabled]="form.pristine">Save changes</button>
+      <button mat-button [disabled]="form.pristine || form.invalid || (saving$|async)" (click)="save()">
+        {{(saving$|async) ? 'Saving changes' : 'Save changes'}}
+      </button>
     </div>
   </form>
 </div>

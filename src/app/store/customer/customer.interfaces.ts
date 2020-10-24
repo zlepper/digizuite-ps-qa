@@ -19,7 +19,12 @@ export interface CustomerEnvironment {
   /**
    * The products installed on the environment
    */
-  product: CustomerProduct[];
+  products: CustomerProduct[];
+
+  /**
+   * The id of the environment
+   */
+  id: string;
 }
 
 export interface Customer {

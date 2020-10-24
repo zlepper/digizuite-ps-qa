@@ -38,3 +38,15 @@ export function getUpdatedState<T extends { id: string }>(
 
   return adapter.removeMany(removes, adapter.upsertMany(upserts, state));
 }
+
+const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+
+export function generateId(length: number = 20): string {
+  let id = '';
+  for (let i = 0; i < length; i++) {
+    const index = Math.floor(Math.random() * chars.length);
+    id += chars[index];
+  }
+
+  return id;
+}

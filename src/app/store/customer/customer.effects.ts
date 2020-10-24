@@ -28,7 +28,7 @@ export class CustomerEffects {
               environments: customer.environments.map(environment => {
                 return {
                   ...environment,
-                  product: environment.product.map(product => {
+                  product: environment.products.map(product => {
                     if (product.productId === changes.productId) {
                       for (const changedVersion of changes.changedVersions) {
                         if (changedVersion.from === product.version) {

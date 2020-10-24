@@ -77,7 +77,7 @@ export class EditProductComponent implements OnInit {
 
         for (const customer of customers) {
           for (const environment of customer.environments ?? []) {
-            for (const customerProduct of environment.product ?? []) {
+            for (const customerProduct of environment.products ?? []) {
               if (customerProduct.productId === product.id) {
                 usedVersions.add(customerProduct.version);
               }

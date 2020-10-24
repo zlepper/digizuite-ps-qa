@@ -36,6 +36,8 @@ import { AddProductDialogComponent } from './components/settings/add-product-dia
 import { ProductCardComponent } from './components/settings/product-list/product-card/product-card.component';
 import { EditProductComponent } from './components/settings/edit-product/edit-product.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -68,12 +70,14 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatProgressSpinnerModule,
     MatCardModule,
     MatTooltipModule,
+    MatSelectModule,
     ReactiveFormsModule,
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([]),
     StoreModule.forFeature('customer', customerReducer),
     StoreModule.forFeature(productFeatureKey, productReducer),
     EffectsModule.forFeature([CustomerEffects, ProductEffects]),
+    MatOptionModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
