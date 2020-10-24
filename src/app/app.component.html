@@ -9,12 +9,12 @@
   >
     <mat-toolbar>Customers</mat-toolbar>
     <mat-nav-list>
-      <mat-list-item *ngFor="let customer of customers$ | async" data-cy="customer-link">
-        <a [routerLink]="['customer', customer.id]" class="filler">
+      <a mat-list-item *ngFor="let customer of customers$ | async" data-cy="customer-link" [routerLink]="['customer', customer.id]">
+        <span  class="filler">
           {{ customer.name }}
-        </a>
+        </span>
 
-        <button mat-icon-button [matMenuTriggerFor]="moreMenu" data-cy="customer-more-button">
+        <button mat-icon-button [matMenuTriggerFor]="moreMenu" (click)="stopPropagation($event)" data-cy="customer-more-button">
           <mat-icon>more_horiz</mat-icon>
         </button>
         <mat-menu #moreMenu="matMenu">
@@ -22,7 +22,7 @@
             <button mat-menu-item (click)="startDelete(customer)" data-cy="customer-more-delete-button">Delete</button>
           </ng-template>
         </mat-menu>
-      </mat-list-item>
+      </a>
     </mat-nav-list>
     <mat-action-list>
       <button mat-list-item (click)="addNewCustomer()" data-cy="add-new-customer">Add new customer</button>
@@ -34,6 +34,20 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <a class="home-link" [routerLink]="['/']">Digizuite Customer QA</a>
+
+      <span class="filler"></span>
+
+      <ng-container *ngIf="user$ | async as user; else showUnAuthorized">
+        <a [routerLink]="['products']" mat-button>Products</a>
+
+        <span>Hi {{ user.displayName }}</span>
+
+        <button mat-button (click)="logout()" class="logout-button">Log out</button>
+      </ng-container>
+
+      <ng-template #showUnAuthorized>
+        <button mat-button (click)="login()">Login</button>
+      </ng-template>
     </mat-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>

@@ -1,17 +1,18 @@
 import { ChangeDetectionStrategy, Component, isDevMode, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { auth } from 'firebase/app';
+import { auth, User } from 'firebase/app';
 import { Observable } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map, shareReplay } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
-import { AddNewCustomerDialogComponent } from './components/add-new-customer-dialog/add-new-customer-dialog.component';
+import { AddNewCustomerDialogComponent } from './components/customers/add-new-customer-dialog/add-new-customer-dialog.component';
 import { Router } from '@angular/router';
 import { Customer } from './store/customer/customer.interfaces';
 import { select, Store } from '@ngrx/store';
 import { deleteCustomer, loadCustomers } from './store/customer/customer.actions';
 import { getAllCustomers } from './store/customer/customer.selectors';
-import { ConfirmDeleteDialogComponent } from './components/confirm-delete-dialog/confirm-delete-dialog.component';
+import { ConfirmDeleteDialogComponent } from './components/customers/confirm-delete-dialog/confirm-delete-dialog.component';
+import { loadProduct } from './store/product/product.actions';
 
 @Component({
   selector: 'app-root',
@@ -26,6 +27,8 @@ export class AppComponent implements OnInit {
   );
 
   customers$: Observable<Customer[]>;
+
+  user$: Observable<User | null>;
 
   constructor(
     private fireAuth: AngularFireAuth,
@@ -51,14 +54,12 @@ export class AppComponent implements OnInit {
       };
     }
 
-    this.fireAuth.user.subscribe(u => {
-      if (u === null) {
-        if ((window as any).Cypress) {
-          return;
-        }
-        this.login();
-      } else {
+    this.user$ = this.fireAuth.user;
+
+    this.user$.subscribe(u => {
+      if (u) {
         this.store.dispatch(loadCustomers());
+        this.store.dispatch(loadProduct())
       }
     });
 
@@ -88,11 +89,21 @@ export class AppComponent implements OnInit {
         if (result) {
           this.store.dispatch(deleteCustomer({ id: customer.id }));
 
-          const url = this.router.createUrlTree(['customer', customer.id]);
+          const url = this.router.createUrlTree(['customer', customer.id, 'edit']);
           if (this.router.isActive(url, false)) {
             this.router.navigate(['/']);
           }
         }
       });
+  }
+
+  logout() {
+    this.fireAuth.signOut();
+    this.router.navigate(['/']);
+  }
+
+  stopPropagation($event: MouseEvent) {
+    $event.stopPropagation();
+    $event.preventDefault();
   }
 }

@@ -1,0 +1,48 @@
+<div *ngIf="customer$ | async as customer; else showLoading">
+  <h1>Editing {{ customer.name }}</h1>
+
+  <form class="edit-customer-form" [formGroup]="form">
+    <div class="customer-name-group">
+      <mat-form-field>
+        <mat-label>Customer name</mat-label>
+        <input matInput type="text" formControlName="name" />
+      </mat-form-field>
+    </div>
+
+    <div class="environments" formArrayName="environments">
+      <ng-container *ngFor="let environmentControl of environments; let environmentIndex = index">
+        <mat-card [formGroupName]="environmentIndex">
+          <mat-card-content>
+            <mat-form-field>
+              <mat-label>Environment Name</mat-label>
+              <input matInput type="text" formControlName="name" />
+            </mat-form-field>
+
+            <div formArrayName="products">
+              <ng-container *ngFor="let productControl of getProducts(environmentIndex); let productIndex = index">
+              TODO
+
+
+              </ng-container>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions>
+            <button mat-button color="warn" (click)="removeEnvironment(environmentIndex)">Remove</button>
+          </mat-card-actions>
+        </mat-card>
+      </ng-container>
+    </div>
+
+    <div class="Customer actions">
+      <button mat-button (click)="addNewEnvironment()">Add new environment</button>
+      <button mat-button [disabled]="form.pristine">Save changes</button>
+    </div>
+  </form>
+</div>
+
+<ng-template #showLoading>
+  <div class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

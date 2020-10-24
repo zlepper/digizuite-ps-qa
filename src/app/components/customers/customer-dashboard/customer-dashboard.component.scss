@@ -1,0 +1,28 @@
+:host {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 1fr;
+  padding: 1em;
+
+  grid-template-areas: 'title edit-customer';
+}
+
+.customer-title {
+  grid-area: title;
+}
+
+.edit-customer {
+  grid-area: edit-customer;
+
+  .edit-link {
+    float: right;
+  }
+}
+
+.spinner-container{
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+
+  align-self: center;
+  justify-self: center;
+}

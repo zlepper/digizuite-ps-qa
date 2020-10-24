@@ -46,7 +46,7 @@
         "named": "never"
       }
     },
-    "typedef": [true, "parameter", "property-declaration", "member-variable-declaration"],
+    "typedef": [true, "parameter"],
     "typedef-whitespace": {
       "options": [
         {
@@ -64,9 +64,6 @@
           "variable-declaration": "onespace"
         }
       ]
-    },
-    "variable-name": {
-      "options": ["ban-keywords", "check-format", "allow-pascal-case"]
     },
     "whitespace": {
       "options": ["check-branch", "check-decl", "check-operator", "check-separator", "check-type", "check-typecast"]

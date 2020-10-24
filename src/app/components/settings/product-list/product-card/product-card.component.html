@@ -1,0 +1,17 @@
+<mat-card>
+  <mat-card-title>
+    {{ product.name }}
+  </mat-card-title>
+
+  <mat-card-content>
+    <div *ngFor="let version of product.versions">
+      {{version.version}}
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-button color="warn">Delete</button>
+
+    <a mat-button [routerLink]="[product.id, 'edit']"> Edit </a>
+  </mat-card-actions>
+</mat-card>

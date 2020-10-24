@@ -1,0 +1,17 @@
+<ng-container *ngIf="products$ | async as products">
+  <div class="list">
+    <ng-container *ngFor="let product of products">
+      <app-product-card [product]="product"></app-product-card>
+    </ng-container>
+  </div>
+
+  <button mat-button (click)="startAddProduct()">
+    Add new product
+  </button>
+</ng-container>
+
+<ng-template #showLoading>
+  <div class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

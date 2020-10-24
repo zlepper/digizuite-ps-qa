@@ -1,0 +1,60 @@
+<div *ngIf="product$ | async as product; else showLoading">
+  <h1 class="mat-title">Edit {{ product.name }}</h1>
+
+  <form [formGroup]="form" *ngIf="form">
+    <div class="product-name">
+      <mat-form-field>
+        <mat-label>Product Name</mat-label>
+        <input matInput type="text" formControlName="name" />
+      </mat-form-field>
+    </div>
+
+    <div class="product-versions" formArrayName="versions">
+      <h2>Versions</h2>
+
+      <ng-container *ngFor="let versionControl of versions; let versionIndex = index">
+        <div [formGroupName]="versionIndex">
+          <mat-form-field>
+            <mat-label>Version</mat-label>
+            <input type="text" matInput formControlName="version" />
+          </mat-form-field>
+
+          <span *ngIf="canRemoveVersion(versionControl)|async; else showCannotRemoveVersion">
+            <button
+              mat-button
+              color="warn"
+              (click)="removeVersion(versionIndex)"
+            >
+              Remove
+            </button>
+          </span>
+
+          <ng-template #showCannotRemoveVersion>
+            <span matTooltip="Version is currently in use, cannot remove.">
+              <button
+                mat-button
+                color="warn"
+                disabled
+              >
+                Remove
+              </button>
+            </span>
+          </ng-template>
+
+        </div>
+      </ng-container>
+
+      <button mat-button (click)="addNewVersion()">Add version</button>
+    </div>
+
+    <button mat-button (click)="save()" color="primary" [disabled]="form.pristine || form.invalid || (loading | async)">
+      {{(loading|async) ? 'Saving changes' : 'Save changes'}}
+    </button>
+  </form>
+</div>
+
+<ng-template #showLoading>
+  <div class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

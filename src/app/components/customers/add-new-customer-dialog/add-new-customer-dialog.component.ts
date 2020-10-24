@@ -3,7 +3,7 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {BehaviorSubject} from 'rxjs';
-import {Customer} from '../../store/customer/customer.interfaces';
+import {Customer} from '../../../store/customer/customer.interfaces';
 
 @Component({
   selector: 'app-add-new-customer-dialog',

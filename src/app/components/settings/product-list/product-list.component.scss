@@ -1,0 +1,16 @@
+:host {
+  display: block;
+
+  padding: 1em;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+
+  grid-row-gap: 1em;
+
+  margin-bottom: 1em;
+
+}

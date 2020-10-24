@@ -1,26 +1,20 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, NEVER, Observable, of } from 'rxjs';
-import { Customer } from '../../store/customer/customer.interfaces';
+import { Customer } from '../store/customer/customer.interfaces';
+import { getCustomer, isLoadingCustomers } from '../store/customer/customer.selectors';
 import { filter, map, switchMap } from 'rxjs/operators';
-import { getCustomer, isLoadingCustomers } from '../../store/customer/customer.selectors';
 
-@Component({
-  selector: 'app-customer-dashboard',
-  templateUrl: './customer-dashboard.component.html',
-  styleUrls: ['./customer-dashboard.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class CustomerDashboardComponent implements OnInit {
+@Injectable()
+export class CustomerDisplayService  {
   public customer$: Observable<Customer>;
 
   public loading$: Observable<boolean>;
 
-  constructor(private store: Store, private route: ActivatedRoute, private router: Router) {
-  }
+  constructor(private store: Store, private route: ActivatedRoute, private router: Router) {}
 
-  ngOnInit(): void {
+  public init() {
     const loadingCustomer = this.store.pipe(select(isLoadingCustomers));
 
     this.loading$ = loadingCustomer;

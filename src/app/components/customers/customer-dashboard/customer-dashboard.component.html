@@ -1,0 +1,14 @@
+<ng-container *ngIf="customer$|async as customer; else showLoading">
+  <h1 class="mat-title customer-title">{{customer.name}}</h1>
+
+  <div class="edit-customer">
+    <a [routerLink]="['edit']" mat-button class="edit-link">Edit</a>
+  </div>
+</ng-container>
+
+<ng-template #showLoading>
+  <div class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>
+
