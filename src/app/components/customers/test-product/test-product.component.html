@@ -1,0 +1,16 @@
+<ng-container *ngIf="customer$|async as customer;">
+  <ng-container *ngIf="environment$|async as environment">
+    <ng-container *ngIf="product$|async as product">
+      <ng-container *ngIf="useCases$|async as useCases">
+        <h1>{{customer.name}} - {{environment.name}} - {{product.name}}</h1>
+
+        <div class="test-container">
+          <div *ngFor="let test of useCases">
+            {{test.name}}
+          </div>
+        </div>
+
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</ng-container>

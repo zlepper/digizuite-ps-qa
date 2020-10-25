@@ -38,4 +38,16 @@ export class Version {
 
     return 0;
   }
+
+  public lessThan(other: Version): boolean {
+    return this.compare(other) < 0;
+  }
+
+  public greaterThan(other: Version): boolean {
+    return this.compare(other) > 0;
+  }
+
+  public equal(other: Version): boolean {
+    return this.compare(other) === 0;
+  }
 }

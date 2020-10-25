@@ -38,6 +38,8 @@ import { EditProductComponent } from './components/settings/edit-product/edit-pr
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
+import { TestProductComponent } from './components/customers/test-product/test-product.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,7 @@ import { MatOptionModule } from '@angular/material/core';
     AddProductDialogComponent,
     ProductCardComponent,
     EditProductComponent,
+    TestProductComponent,
   ],
   imports: [
     BrowserModule,
@@ -71,6 +74,7 @@ import { MatOptionModule } from '@angular/material/core';
     MatCardModule,
     MatTooltipModule,
     MatSelectModule,
+    MatSnackBarModule,
     ReactiveFormsModule,
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([]),

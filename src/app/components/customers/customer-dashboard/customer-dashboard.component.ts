@@ -2,6 +2,10 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Customer } from '../../../store/customer/customer.interfaces';
 import { CustomerDisplayService } from '../../../services/customer-display.service';
+import { Product } from '../../../store/product/product.interfaces';
+import { select, Store } from '@ngrx/store';
+import { getProductDict } from '../../../store/product/product.selectors';
+import { Dictionary } from '@ngrx/entity';
 
 @Component({
   selector: 'app-customer-dashboard',
@@ -15,7 +19,9 @@ export class CustomerDashboardComponent implements OnInit {
 
   public loading$: Observable<boolean>;
 
-  constructor(private customerDisplayService: CustomerDisplayService) {
+  public products$: Observable<Dictionary<Product>>;
+
+  constructor(private customerDisplayService: CustomerDisplayService, private store: Store) {
   }
 
   ngOnInit(): void {
@@ -23,5 +29,7 @@ export class CustomerDashboardComponent implements OnInit {
 
     this.customer$ = this.customerDisplayService.customer$;
     this.loading$ = this.customerDisplayService.loading$;
+
+    this.products$  = this.store.pipe(select(getProductDict));
   }
 }

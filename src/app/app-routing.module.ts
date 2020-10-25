@@ -5,6 +5,7 @@ import { MainDashboardComponent } from './components/main-dashboard/main-dashboa
 import { EditCustomerComponent } from './components/customers/edit-customer/edit-customer.component';
 import { ProductListComponent } from './components/settings/product-list/product-list.component';
 import { EditProductComponent } from './components/settings/edit-product/edit-product.component';
+import { TestProductComponent } from './components/customers/test-product/test-product.component';
 
 const routes: Routes = [
   {
@@ -14,6 +15,10 @@ const routes: Routes = [
   {
     path: 'customer/:customerId/edit',
     component: EditCustomerComponent,
+  },
+  {
+    path: 'customer/:customerId/environment/:environmentId/product/:productId/test',
+    component: TestProductComponent,
   },
   {
     path: 'products',

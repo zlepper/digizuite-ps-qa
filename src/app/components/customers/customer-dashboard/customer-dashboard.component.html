@@ -4,6 +4,27 @@
   <div class="edit-customer">
     <a [routerLink]="['edit']" mat-button class="edit-link" data-cy="edit-customer-link">Edit</a>
   </div>
+
+  <div class="environment" *ngFor="let env of customer.environments">
+    <h2>{{env.name}}</h2>
+
+    <div class="product-statistics-container" *ngIf="products$|async as products">
+      <ng-container *ngFor="let product of env.products">
+
+        <mat-card>
+          <mat-card-title>{{products[product.productId]?.name}}</mat-card-title>
+          <mat-card-content>
+            TODO: Put statistics here
+          </mat-card-content>
+          <mat-card-actions>
+            <a mat-button [routerLink]="['environment', env.id, 'product', product.productId, 'test']">
+              Go to
+            </a>
+          </mat-card-actions>
+        </mat-card>
+      </ng-container>
+    </div>
+  </div>
 </ng-container>
 
 <ng-template #showLoading>

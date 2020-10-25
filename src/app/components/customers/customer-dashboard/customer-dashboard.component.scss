@@ -4,6 +4,8 @@
   grid-template-rows: auto 1fr;
   padding: 1em;
 
+  grid-gap: 1em;
+
   grid-template-areas: 'title edit-customer';
 }
 
@@ -25,4 +27,9 @@
 
   align-self: center;
   justify-self: center;
+}
+
+.product-statistics-container {
+  display: grid;
+  grid-gap: 1em;
 }

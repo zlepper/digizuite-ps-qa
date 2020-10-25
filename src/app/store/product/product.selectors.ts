@@ -10,7 +10,7 @@ const productState = createSelector(productFeatureState, state => state.products
 
 export const getAllProducts = createSelector(productState, state => selectAllProducts(state));
 
-const getProductDict = createSelector(productState, state => selectProductEntities(state));
+export const getProductDict = createSelector(productState, state => selectProductEntities(state));
 
 export function getProduct(id: string) {
   return createSelector(getProductDict, dict => dict[id]);
