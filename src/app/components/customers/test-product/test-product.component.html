@@ -1,15 +1,20 @@
-<ng-container *ngIf="customer$|async as customer;">
-  <ng-container *ngIf="environment$|async as environment">
-    <ng-container *ngIf="product$|async as product">
-      <ng-container *ngIf="useCases$|async as useCases">
-        <h1>{{customer.name}} - {{environment.name}} - {{product.name}}</h1>
+<ng-container *ngIf="customer$ | async as customer">
+  <ng-container *ngIf="environment$ | async as environment">
+    <ng-container *ngIf="product$ | async as product">
+      <h1>{{ customer.name }} - {{ environment.name }} - {{ product.name }}</h1>
 
-        <div class="test-container">
-          <div *ngFor="let test of useCases">
-            {{test.name}}
+      <ng-container *ngIf="useCases$ | async as useCases">
+        <ng-container *ngIf="tests$ | async as tests">
+          <div class="test-container">
+            <ng-container *ngFor="let test of tests">
+              <div class="test" *ngIf="useCases[test.useCaseId] as useCase">
+                <app-test-result-icon [result]="test.result" (click)="toggleResult(test)"></app-test-result-icon>
+
+                <span class="test-name">{{ useCase.name }}</span>
+              </div>
+            </ng-container>
           </div>
-        </div>
-
+        </ng-container>
       </ng-container>
     </ng-container>
   </ng-container>

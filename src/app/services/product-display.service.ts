@@ -19,7 +19,14 @@ export class ProductDisplayService {
 
   constructor(private store: Store, private route: ActivatedRoute, private router: Router, private snackBar: MatSnackBar) {}
 
+  private initialized = false;
+
   public init() {
+    if(this.initialized) {
+      return;
+    }
+    this.initialized = true;
+
     const loadingProduct = this.store.pipe(select(isLoadingProducts));
 
     this.loading$ = loadingProduct;

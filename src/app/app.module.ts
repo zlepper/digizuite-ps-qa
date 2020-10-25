@@ -40,6 +40,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { TestProductComponent } from './components/customers/test-product/test-product.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { TestEffects } from './store/test/test.effects';
+import { testFeatureKey } from './store/test/test.interfaces';
+import { testReducer } from './store/test/test.reducer';
+import { TestResultIconComponent } from './components/customers/test-result-icon/test-result-icon.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +58,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     ProductCardComponent,
     EditProductComponent,
     TestProductComponent,
+    TestResultIconComponent,
   ],
   imports: [
     BrowserModule,
@@ -80,7 +85,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     EffectsModule.forRoot([]),
     StoreModule.forFeature('customer', customerReducer),
     StoreModule.forFeature(productFeatureKey, productReducer),
-    EffectsModule.forFeature([CustomerEffects, ProductEffects]),
+    StoreModule.forFeature(testFeatureKey, testReducer),
+    EffectsModule.forFeature([CustomerEffects, ProductEffects, TestEffects]),
     MatOptionModule,
   ],
   providers: [],

@@ -1,0 +1,11 @@
+<ng-container [ngSwitch]="result">
+  <button mat-icon-button *ngSwitchCase="TestResult.passed" color="primary">
+    <mat-icon>done</mat-icon>
+  </button>
+  <button mat-icon-button *ngSwitchCase="TestResult.failed" color="warn">
+    <mat-icon>clear</mat-icon>
+  </button>
+  <button mat-icon-button *ngSwitchDefault>
+    <mat-icon>remove</mat-icon>
+  </button>
+</ng-container>

@@ -17,7 +17,14 @@ export class CustomerEnvironmentDisplayService {
     private snackBar: MatSnackBar,
   ) {}
 
+  private initialized = false;
+
   public init() {
+    if (this.initialized) {
+      return;
+    }
+    this.initialized = true;
+
     this.customerDisplayService.init();
 
     const environmentId$ = this.route.paramMap.pipe(map(params => params.get('environmentId')!));

@@ -13,6 +13,7 @@ import { deleteCustomer, loadCustomers } from './store/customer/customer.actions
 import { getAllCustomers } from './store/customer/customer.selectors';
 import { ConfirmDeleteDialogComponent } from './components/customers/confirm-delete-dialog/confirm-delete-dialog.component';
 import { loadProduct } from './store/product/product.actions';
+import { loadTests } from './store/test/test.actions';
 
 @Component({
   selector: 'app-root',
@@ -59,7 +60,8 @@ export class AppComponent implements OnInit {
     this.user$.subscribe(u => {
       if (u) {
         this.store.dispatch(loadCustomers());
-        this.store.dispatch(loadProduct())
+        this.store.dispatch(loadProduct());
+        this.store.dispatch(loadTests());
       }
     });
 
