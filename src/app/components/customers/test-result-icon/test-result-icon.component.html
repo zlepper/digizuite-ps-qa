@@ -1,7 +1,10 @@
 <ng-container [ngSwitch]="result">
-  <button mat-icon-button [color]="iconColor" [ngSwitch]="result">
-    <mat-icon *ngSwitchCase="TestResult.passed">done</mat-icon>
-    <mat-icon *ngSwitchCase="TestResult.failed">clear</mat-icon>
-    <mat-icon *ngSwitchDefault>remove</mat-icon>
+  <button mat-icon-button [ngSwitch]="result">
+    <mat-icon>
+      <svg viewBox="0 0 24 24">
+        <path style="d: path('{{checkmarkPath}}'); stroke: {{svgColor}}" class="icon-path" />
+        <path style="d: path('{{secondaryPath}}'); stroke: {{svgColor}}" class="icon-path" />
+      </svg>
+    </mat-icon>
   </button>
 </ng-container>

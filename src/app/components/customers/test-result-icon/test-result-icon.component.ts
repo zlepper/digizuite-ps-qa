@@ -11,16 +11,37 @@ export class TestResultIconComponent {
   @Input()
   public result: TestResult;
 
-  public TestResult = TestResult;
-
-  public get iconColor(): 'primary' | 'warn' | '' {
+  public get checkmarkPath(): string {
     switch (this.result) {
       default:
-        return '';
+        return 'M4 12 L12 12 L20 12';
       case TestResult.passed:
-        return 'primary';
+        return 'M4 12 L10 18 L22 4';
       case TestResult.failed:
-        return 'warn';
+        return 'M4 20 L12 12 L4 4';
+    }
+  }
+
+
+  public get secondaryPath(): string {
+    switch (this.result) {
+      default:
+        return 'M4 12 L12 12 L20 12';
+      case TestResult.passed:
+        return 'M4 12 L10 18 L22 4';
+      case TestResult.failed:
+        return 'M20 20 L12 12 L20 4';
+    }
+  }
+
+  public get svgColor(): string {
+    switch (this.result) {
+      default:
+        return 'rgba(0, 0, 0, 0.55)';
+      case TestResult.passed:
+        return 'limegreen';
+      case TestResult.failed:
+        return 'red';
     }
   }
 }
