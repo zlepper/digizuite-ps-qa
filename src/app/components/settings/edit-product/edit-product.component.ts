@@ -40,6 +40,8 @@ export class EditProductComponent implements OnInit {
   private usedVersions$: Observable<Set<string>>;
   private useCases$: Observable<ProductUseCase[]>;
 
+  public toRemove = new Set<string>();
+
   constructor(
     private productDisplayService: ProductDisplayService,
     private fb: FormBuilder,
@@ -234,8 +236,17 @@ export class EditProductComponent implements OnInit {
 
   public removeUseCase(index: number) {
     const useCases = this.productUseCasesForm.get('useCases') as FormArray;
-    useCases.removeAt(index);
+    const useCase = useCases.get([index])!;
+
     useCases.markAsDirty();
+
+    const id = useCase.value.id;
+
+    this.toRemove.add(id);
+  }
+
+  public reAddUseCase(id: string) {
+    this.toRemove.delete(id);
   }
 
   public getLowerVersions(useCaseIndex: number): Observable<Version[]> {
@@ -283,9 +294,15 @@ export class EditProductComponent implements OnInit {
       }
     }
 
+    for (const id of this.toRemove) {
+      const p = this.firestore.productUseCaseCollection.doc(id).delete();
+      promises.push(p);
+    }
+
     try {
       this.savingUseCases.next(true);
       await Promise.all(promises);
+      this.toRemove.clear();
     } catch (e) {
       console.error(e);
     } finally {

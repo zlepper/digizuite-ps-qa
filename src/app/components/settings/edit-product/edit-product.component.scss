@@ -20,3 +20,18 @@
 .use-case-editor {
   grid-area: use-case-editor;
 }
+
+.deleted {
+  opacity: 0.5;
+  pointer-events: none;
+  position: relative;
+
+  &:before {
+    content: ' ';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.55);
+    width: 100%;
+  }
+}

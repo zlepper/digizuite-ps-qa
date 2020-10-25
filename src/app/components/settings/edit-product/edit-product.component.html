@@ -48,45 +48,42 @@
 
   <form *ngIf="productUseCasesForm" [formGroup]="productUseCasesForm" (ngSubmit)="saveProductUseCases()" class="use-case-editor">
     <div formArrayName="useCases">
-      <div class="use-case" *ngFor="let _ of useCaseControls; let index = index" [formGroupName]="index">
-        <mat-form-field>
-          <mat-label>Name</mat-label>
-          <input matInput type="text" formControlName="name" />
-        </mat-form-field>
+      <div class="use-case" *ngFor="let ctrl of useCaseControls; let index = index" [formGroupName]="index">
+        <span [class.deleted]="toRemove.has(ctrl.value.id)">
+          <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput type="text" formControlName="name" />
+          </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>Min version</mat-label>
-          <mat-select formControlName="fromVersion">
-            <mat-option [value]="null"> No min version </mat-option>
-            <mat-option *ngFor="let v of getLowerVersions(index) | async" [value]="v.text">
-              {{ v.text }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+          <mat-form-field>
+            <mat-label>Min version</mat-label>
+            <mat-select formControlName="fromVersion">
+              <mat-option [value]="null"> No min version </mat-option>
+              <mat-option *ngFor="let v of getLowerVersions(index) | async" [value]="v.text">
+                {{ v.text }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>Max version</mat-label>
-          <mat-select formControlName="toVersion">
-            <mat-option [value]="null"> No max version </mat-option>
-            <mat-option *ngFor="let v of getUpperVersions(index) | async" [value]="v.text">
-              {{ v.text }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+          <mat-form-field>
+            <mat-label>Max version</mat-label>
+            <mat-select formControlName="toVersion">
+              <mat-option [value]="null"> No max version </mat-option>
+              <mat-option *ngFor="let v of getUpperVersions(index) | async" [value]="v.text">
+                {{ v.text }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </span>
 
-        <button mat-button type="button" color="warn" (click)="removeUseCase(index)">
-          Remove
-        </button>
+        <button mat-button type="button" color="warn" (click)="removeUseCase(index)" *ngIf="!toRemove.has(ctrl.value.id)">Remove</button>
+        <button mat-button type="button" (click)="reAddUseCase(ctrl.value.id)" *ngIf="toRemove.has(ctrl.value.id)">Restore</button>
       </div>
     </div>
 
-    <button mat-button type="button" (click)="addUseCase()">
-      Add new use case
-    </button>
+    <button mat-button type="button" (click)="addUseCase()">Add new use case</button>
 
-    <button mat-button>
-      Save changes
-    </button>
+    <button mat-button>Save changes</button>
   </form>
 </div>
 
