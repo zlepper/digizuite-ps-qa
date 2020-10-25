@@ -1,6 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
 import { TestResult } from '../../../store/test/test.interfaces';
 
+const checkmarkPath = 'M4 12 L10 18 L22 4';
+const waitingPath = 'M4 12 L12 12 L20 12';
+
 @Component({
   selector: 'app-test-result-icon',
   templateUrl: './test-result-icon.component.html',
@@ -14,9 +17,9 @@ export class TestResultIconComponent {
   public get checkmarkPath(): string {
     switch (this.result) {
       default:
-        return 'M4 12 L12 12 L20 12';
+        return waitingPath;
       case TestResult.passed:
-        return 'M4 12 L10 18 L22 4';
+        return checkmarkPath;
       case TestResult.failed:
         return 'M4 20 L12 12 L4 4';
     }
@@ -26,9 +29,9 @@ export class TestResultIconComponent {
   public get secondaryPath(): string {
     switch (this.result) {
       default:
-        return 'M4 12 L12 12 L20 12';
+        return waitingPath;
       case TestResult.passed:
-        return 'M4 12 L10 18 L22 4';
+        return checkmarkPath;
       case TestResult.failed:
         return 'M20 20 L12 12 L20 4';
     }
