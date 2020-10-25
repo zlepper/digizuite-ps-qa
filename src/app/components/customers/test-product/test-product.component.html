@@ -6,7 +6,7 @@
       <ng-container *ngIf="useCases$ | async as useCases">
         <ng-container *ngIf="tests$ | async as tests">
           <div class="test-container">
-            <ng-container *ngFor="let test of tests">
+            <ng-container *ngFor="let test of tests; trackBy: trackTest">
               <div class="test" *ngIf="useCases[test.useCaseId] as useCase">
                 <app-test-result-icon [result]="test.result" (click)="toggleResult(test)"></app-test-result-icon>
 

@@ -27,6 +27,9 @@ export class TestProductComponent implements OnInit {
   public useCases$: Observable<Dictionary<ProductUseCase>>;
 
   public tests$: Observable<Test[]>;
+  public trackTest(index: number, test: Test) {
+    return test.id;
+  }
 
   constructor(
     private testDisplayService: TestDisplayService,
@@ -37,8 +40,7 @@ export class TestProductComponent implements OnInit {
     private snackBar: MatSnackBar,
     private router: Router,
     private firestore: AppFirestoreService,
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.testDisplayService.init();
