@@ -1,0 +1,8 @@
+<div *ngFor="let datum of data; trackBy: trackDatum" class="block" [style.color]="datum.color">
+  <div class="label">
+    {{datum.name}}
+  </div>
+  <div class="count">
+    {{datum.count}}
+  </div>
+</div>

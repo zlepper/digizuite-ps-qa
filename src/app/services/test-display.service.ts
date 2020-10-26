@@ -8,7 +8,7 @@ import { getUseCasesForProduct } from '../store/product/product.selectors';
 import { combineLatest, NEVER, Observable, of } from 'rxjs';
 import { Customer, CustomerEnvironment } from '../store/customer/customer.interfaces';
 import { Product, ProductUseCase } from '../store/product/product.interfaces';
-import { Version } from '../helpers';
+import { getTestsFromProductUseCases, getUseCasesForProductVersion, Version } from '../helpers';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Dictionary } from '@ngrx/entity';
@@ -58,27 +58,7 @@ export class TestDisplayService {
           return NEVER;
         }
 
-        const selectedVersion = new Version(version);
-
-        const matchingCases = useCases.filter(uc => {
-          if (uc.fromVersion) {
-            const fw = new Version(uc.fromVersion);
-
-            if (fw.greaterThan(selectedVersion)) {
-              return false;
-            }
-          }
-
-          if (uc.toVersion) {
-            const tw = new Version(uc.toVersion);
-
-            if (tw.lessThan(selectedVersion)) {
-              return false;
-            }
-          }
-
-          return true;
-        });
+        const matchingCases = getUseCasesForProductVersion(useCases, version);
 
         return of(matchingCases);
       }),
@@ -101,24 +81,9 @@ export class TestDisplayService {
 
     const testDict$ = this.store.pipe(select(getTestsDict));
 
-    this.tests$ = combineLatest([this.customer$, this.environment$, this.product$, this.useCases$, testDict$]).pipe(
-      map(([customer, environment, product, useCases, testDict]) => {
-        const idPrefix = `${customer.id}:${environment.id}:${product.id}:`;
-
-        return useCases.map(uc => {
-          const id = idPrefix + uc.id;
-
-          return (
-            testDict[id] ?? {
-              id,
-              result: TestResult.notRun,
-              customerId: customer.id,
-              environmentId: environment.id,
-              productId: product.id,
-              useCaseId: uc.id,
-            }
-          );
-        });
+    this.tests$ = combineLatest([this.customer$, this.environment$, this.useCases$, testDict$]).pipe(
+      map(([customer, environment, useCases, testDict]) => {
+        return getTestsFromProductUseCases(useCases, customer.id, environment.id, testDict);
       }),
     );
   }

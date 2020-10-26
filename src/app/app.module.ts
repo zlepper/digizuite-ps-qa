@@ -44,6 +44,10 @@ import { TestEffects } from './store/test/test.effects';
 import { testFeatureKey } from './store/test/test.interfaces';
 import { testReducer } from './store/test/test.reducer';
 import { TestResultIconComponent } from './components/customers/test-result-icon/test-result-icon.component';
+import { PieChartComponent } from './components/charts/pie-chart/pie-chart.component';
+import { ChartsModule } from 'ng2-charts';
+import { BlockChartComponent } from './components/charts/block-chart/block-chart.component';
+import { NumberChartComponent } from './components/charts/number-chart/number-chart.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +63,9 @@ import { TestResultIconComponent } from './components/customers/test-result-icon
     EditProductComponent,
     TestProductComponent,
     TestResultIconComponent,
+    PieChartComponent,
+    BlockChartComponent,
+    NumberChartComponent,
   ],
   imports: [
     BrowserModule,
@@ -81,6 +88,7 @@ import { TestResultIconComponent } from './components/customers/test-result-icon
     MatSelectModule,
     MatSnackBarModule,
     ReactiveFormsModule,
+    ChartsModule,
     StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([]),
     StoreModule.forFeature('customer', customerReducer),

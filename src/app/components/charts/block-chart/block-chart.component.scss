@@ -1,0 +1,9 @@
+:host {
+  display: flex;
+  flex-direction: row;
+  height: 3em;
+}
+
+.block {
+  transition: flex-grow 500ms ease-in-out;
+}
