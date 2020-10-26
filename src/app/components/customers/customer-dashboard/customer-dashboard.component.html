@@ -1,29 +1,31 @@
-<ng-container *ngIf="customer$|async as customer; else showLoading">
-  <h1 class="mat-title customer-title">{{customer.name}}</h1>
+<ng-container *ngIf="customer$ | async as customer; else showLoading">
+  <h1 class="mat-title customer-title">{{ customer.name }}</h1>
 
   <div class="edit-customer">
     <a [routerLink]="['edit']" mat-button class="edit-link" data-cy="edit-customer-link">Edit</a>
   </div>
 
   <div class="environment" *ngFor="let env of customer.environments">
-    <h2>{{env.name}}</h2>
+    <h2>{{ env.name }}</h2>
 
-    <div class="product-statistics-container" *ngIf="products$|async as products">
+    <div class="product-statistics-container" *ngIf="products$ | async as products">
       <ng-container *ngFor="let product of env.products">
-
         <mat-card>
-          <mat-card-title>{{products[product.productId]?.name}}</mat-card-title>
-          <mat-card-content>
-            TODO: Put statistics here
-          </mat-card-content>
+          <mat-card-title>{{ products[product.productId]?.name }}</mat-card-title>
+          <mat-card-content> TODO: Put statistics here </mat-card-content>
           <mat-card-actions>
-            <a mat-button [routerLink]="['environment', env.id, 'product', product.productId, 'test']">
-              Go to
-            </a>
+            <a mat-button [routerLink]="['environment', env.id, 'product', product.productId, 'test']"> Go to </a>
           </mat-card-actions>
         </mat-card>
       </ng-container>
     </div>
+  </div>
+
+  <div *ngIf="!customer.environments || customer.environments.length == 0" class="no-environments">
+    <span> Seems pretty empty here, how about adding some environments to the customer? </span>
+    <a mat-raised-button color="primary" [routerLink]="['edit']">
+      Edit
+    </a>
   </div>
 </ng-container>
 
@@ -32,4 +34,3 @@
     <mat-spinner></mat-spinner>
   </div>
 </ng-template>
-

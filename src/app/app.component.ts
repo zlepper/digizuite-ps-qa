@@ -14,6 +14,7 @@ import { getAllCustomers } from './store/customer/customer.selectors';
 import { ConfirmDeleteDialogComponent } from './components/customers/confirm-delete-dialog/confirm-delete-dialog.component';
 import { loadProduct } from './store/product/product.actions';
 import { loadTests } from './store/test/test.actions';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -42,7 +43,7 @@ export class AppComponent implements OnInit {
   public login(): void {
     const provider = new auth.OAuthProvider('microsoft.com');
     provider.setCustomParameters({
-      tenant: '6e80d0d2-c049-4101-ad8d-8fd678b61299',
+      tenant: environment.activeDirectoryTenantId,
     });
 
     this.fireAuth.signInWithRedirect(provider);

@@ -2,18 +2,21 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
+import { IEnvironment } from './IEnvironment';
+
+export const environment: IEnvironment = {
   production: false,
   firebase: {
-    apiKey: 'AIzaSyD8GEOeUnFoL3yhpOwGHzPasRbiEEKL5_s',
-    authDomain: 'digizuite-ps-qa.firebaseapp.com',
-    databaseURL: 'https://digizuite-ps-qa.firebaseio.com',
-    projectId: 'digizuite-ps-qa',
-    storageBucket: 'digizuite-ps-qa.appspot.com',
-    messagingSenderId: '28009938404',
-    appId: '1:28009938404:web:21023fe957258a5e0e1bf1',
-    measurementId: 'G-MXS7YSJ3QE',
+    apiKey: 'AIzaSyAhRsBsZkHm6XStc7iCqKRz9S48lH1ri5Y',
+    authDomain: 'digizuite-ps-qa-dev.firebaseapp.com',
+    databaseURL: 'https://digizuite-ps-qa-dev.firebaseio.com',
+    projectId: 'digizuite-ps-qa-dev',
+    storageBucket: 'digizuite-ps-qa-dev.appspot.com',
+    messagingSenderId: '648604823183',
+    appId: '1:648604823183:web:30d511e8be4046051f8afa',
+    measurementId: 'G-LLMX8N23ZT',
   },
+  activeDirectoryTenantId: '6e80d0d2-c049-4101-ad8d-8fd678b61299',
 };
 
 /*
