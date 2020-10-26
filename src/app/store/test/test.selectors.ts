@@ -8,3 +8,5 @@ const getTestFeatureState = createFeatureSelector<TestState>(testFeatureKey);
 const getTestsState = createSelector(getTestFeatureState, state => state.tests);
 
 export const getTestsDict = createSelector(getTestsState, selectEntities);
+
+export const isLoadingTests = createSelector(getTestFeatureState, state => state.loading);

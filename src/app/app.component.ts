@@ -1,20 +1,22 @@
 import { ChangeDetectionStrategy, Component, isDevMode, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth, User } from 'firebase/app';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { map, shareReplay } from 'rxjs/operators';
+import { map, shareReplay, startWith } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { AddNewCustomerDialogComponent } from './components/customers/add-new-customer-dialog/add-new-customer-dialog.component';
 import { Router } from '@angular/router';
 import { Customer } from './store/customer/customer.interfaces';
 import { select, Store } from '@ngrx/store';
 import { deleteCustomer, loadCustomers } from './store/customer/customer.actions';
-import { getAllCustomers } from './store/customer/customer.selectors';
+import { getAllCustomers, isLoadingCustomers } from './store/customer/customer.selectors';
 import { ConfirmDeleteDialogComponent } from './components/customers/confirm-delete-dialog/confirm-delete-dialog.component';
 import { loadProduct } from './store/product/product.actions';
 import { loadTests } from './store/test/test.actions';
 import { environment } from '../environments/environment';
+import { isLoadingProducts, isLoadingUseCases } from './store/product/product.selectors';
+import { isLoadingTests } from './store/test/test.selectors';
 
 @Component({
   selector: 'app-root',
@@ -31,6 +33,16 @@ export class AppComponent implements OnInit {
   customers$: Observable<Customer[]>;
 
   user$: Observable<User | null>;
+
+  itemsLoading$: Observable<{ name: string; loading: boolean }[]>;
+
+  public waitingForAuthState$ = new BehaviorSubject<boolean>(true);
+
+  public initializing$: Observable<boolean>;
+  public loadingCustomers$: Observable<boolean>;
+  public loadingProducts$: Observable<boolean>;
+  public loadingProductUseCases$: Observable<boolean>;
+  public loadingTests$: Observable<boolean>;
 
   constructor(
     private fireAuth: AngularFireAuth,
@@ -67,6 +79,11 @@ export class AppComponent implements OnInit {
     });
 
     this.customers$ = this.store.pipe(select(getAllCustomers));
+
+    this.fireAuth.getRedirectResult().then(r => {
+      console.log('redirect result', r);
+      this.waitingForAuthState$.next(false);
+    });
   }
 
   addNewCustomer(): void {

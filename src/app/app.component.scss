@@ -42,3 +42,18 @@
 .logout-button {
   margin-left: 1em;
 }
+
+.initialization-cover {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  pointer-events: none;
+  z-index: 1;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

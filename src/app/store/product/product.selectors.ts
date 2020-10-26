@@ -16,8 +16,6 @@ export function getProduct(id: string) {
   return createSelector(getProductDict, dict => dict[id]);
 }
 
-export const isLoadingProducts = createSelector(productFeatureState, state => state.loadingProducts);
-
 const getUseCasesState = createSelector(productFeatureState, state => state.useCases);
 
 const getAllUseCases = createSelector(getUseCasesState, state => selectAllUseCases(state));
@@ -25,3 +23,6 @@ const getAllUseCases = createSelector(getUseCasesState, state => selectAllUseCas
 export function getUseCasesForProduct(productId: string) {
   return createSelector(getAllUseCases, cases => cases.filter(c => c.productId === productId));
 }
+
+export const isLoadingProducts = createSelector(productFeatureState, state => state.loadingProducts);
+export const isLoadingUseCases = createSelector(productFeatureState, state => state.loadingUseCases);

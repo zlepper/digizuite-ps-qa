@@ -10,7 +10,7 @@
     <mat-toolbar>Customers</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item *ngFor="let customer of customers$ | async" data-cy="customer-link" [routerLink]="['customer', customer.id]">
-        <span  class="filler">
+        <span class="filler">
           {{ customer.name }}
         </span>
 
@@ -46,9 +46,15 @@
       </ng-container>
 
       <ng-template #showUnAuthorized>
-        <button mat-button (click)="login()">Login</button>
+        <button mat-button (click)="login()" *ngIf="!(waitingForAuthState$ | async)">Login</button>
       </ng-template>
     </mat-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<div class="initialization-cover" *ngIf="waitingForAuthState$ | async">
+  <mat-spinner>
+
+  </mat-spinner>
+</div>
