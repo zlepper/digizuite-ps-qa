@@ -9,7 +9,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "format": "prettier --write .",
-    "cypress": "cypress open"
+    "cypress": "cypress open",
+    "firebase:publish": "npm run ng -- build --prod && firebase deploy --project digizuite-ps-qa"
   },
   "private": true,
   "dependencies": {
