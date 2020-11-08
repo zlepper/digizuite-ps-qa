@@ -1,5 +1,4 @@
-import { CustomerEnvironment } from '../store/customer/customer.interfaces';
-import { Product, ProductUseCase } from '../store/product/product.interfaces';
+import { ProductUseCase } from '../store/product/product.interfaces';
 import { Test, TestResult } from '../store/test/test.interfaces';
 import { Version } from './version';
 import { Dictionary } from '@ngrx/entity';
@@ -7,7 +6,7 @@ import { Dictionary } from '@ngrx/entity';
 export function getUseCasesForProductVersion(useCases: ProductUseCase[], productVersion: string): ProductUseCase[] {
   const selectedVersion = new Version(productVersion);
 
-  const matchingCases = useCases.filter(uc => {
+  return useCases.filter(uc => {
     if (uc.fromVersion) {
       const fw = new Version(uc.fromVersion);
 
@@ -26,8 +25,6 @@ export function getUseCasesForProductVersion(useCases: ProductUseCase[], product
 
     return true;
   });
-
-  return matchingCases;
 }
 
 export function getTestsFromProductUseCases(
